@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Demo blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+<header>
+  <h1>Demo blog</h1>
+  <nav>
+    {% if user %}
+      <span>Hi, <b>{{ user }}</b>!</span>
+      <form action="{{ url_for('logout') }}" method="post" style="display:inline;">
+        <button type="submit">Logout</button>
+      </form>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('signup') }}">Sign up</a>
+    {% endif %}
+  </nav>
+</header>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for cat, msg in messages %}
+      <div class="flash">{{ msg }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<section>
+  <h2>Create a post</h2>
+  {% if user %}
+    <form action="{{ url_for('create_post') }}" method="post">
+      <input name="title" placeholder="Post title" required><br><br>
+      <textarea name="body" placeholder="Post body" required></textarea><br><br>
+      <button type="submit">Publish</button>
+    </form>
+  {% else %}
+    <p><em>Please <a href="{{ url_for('login') }}">log in</a> to create a post.</em></p>
+  {% endif %}
+</section>
+
+<section>
+  <h2>Posts</h2>
+  {% if posts %}
+    <ul>
+      {% for p in posts|reverse %}
+        <li>
+          <a href="{{ url_for('view_post', pid=p.id) }}"><b>{{ p.title }}</b></a>
+          <small>by {{ p.author }}</small>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p><em>No posts yet.</em></p>
+  {% endif %}
+</section>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>{{ post.title }} — Demo blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+<header>
+  <div><a href="{{ url_for('index') }}">← Back</a></div>
+  <div class="muted">Logged in as: {{ user or "guest" }}</div>
+</header>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for cat, msg in messages %}
+      <div class="flash">{{ msg }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<article>
+  <h1>{{ post.title }}</h1>
+  <p class="muted">by <b>{{ post.author }}</b></p>
+  <p>{{ post.body }}</p>
+</article>
+
+{% if user and user == post.author %}
+  <section>
+    <h2>Edit post</h2>
+    <form action="{{ url_for('edit_post', pid=post.id) }}" method="post">
+      <input name="title" value="{{ post.title }}" required><br><br>
+      <textarea name="body" required>{{ post.body }}</textarea><br><br>
+      <button type="submit">Save changes</button>
+    </form>
+  </section>
+{% endif %}
+
+<section>
+  <h2>Comments</h2>
+  {% if post.comments %}
+    <ul>
+      {% for c in post.comments %}
+        <li><b>{{ c.author }}</b>: {{ c.text }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p><em>No comments yet.</em></p>
+  {% endif %}
+</section>
+
+<section>
+  <h2>Add a comment</h2>
+  {% if user %}
+    <form action="{{ url_for('add_comment_to_post', pid=post.id) }}" method="post">
+      <textarea name="text" placeholder="Your comment" required></textarea><br><br>
+      <button type="submit">Submit</button>
+    </form>
+  {% else %}
+    <p><em>Please <a href="{{ url_for('login') }}">log in</a> to comment.</em></p>
+  {% endif %}
+</section>
+</body>
+</html>

@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "author": "pablo",
+    "title": "Test post",
+    "body": "Test comment",
+    "comments": [
+      {
+        "author": "pablo",
+        "text": "good post"
+      }
+    ]
+  }
+]

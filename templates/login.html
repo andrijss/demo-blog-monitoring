@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Log in - Demo blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+<section>
+  <h1>Login</h1>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for cat, msg in messages %}
+        <div class="flash">{{ msg }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  <form action="{{ url_for('login') }}" method="post">
+    <label>Username</label><br>
+    <input name="username" required><br><br>
+    <label>Password</label><br>
+    <input name="password" type="password" required><br><br>
+    <button type="submit">Login</button>
+  </form>
+  <p>New here? <a href="{{ url_for('signup') }}">Create an account</a></p>
+  </section>
+</body>
+</html>
