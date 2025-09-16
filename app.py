@@ -2,6 +2,7 @@ import os
 import json
 from flask import Flask, request, jsonify, render_template, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
+from azure.monitor.opentelemetry import configure_azure_monitor
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 USERS_FILE = os.path.join(BASE_DIR, "users.json")
@@ -11,6 +12,11 @@ app = Flask(__name__)
 
 # I've hardcoded the key here for demo and simplicity, don't ever do it like that in prod :)
 app.secret_key = "dev-demo-secret-key-CHANGE-ME"
+
+configure_azure_monitor(
+    connection_string = "InstrumentationKey=06a9d61b-01d9-4db6-95a7-37e9ba93af92;IngestionEndpoint=https://francecentral-1.in.applicationinsights.azure.com/;LiveEndpoint=https://francecentral.livediagnostics.monitor.azure.com/;ApplicationId=cdf28552-6ad6-4479-a6db-50b36462e6bd",
+    enable_live_metrics = True
+)
 
 def _read_json(path, default):
     if not os.path.exists(path):
@@ -220,4 +226,5 @@ def add_comment_to_post(pid):
 
 
 if __name__ == "__main__":
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     app.run(host="0.0.0.0", port=8000, debug=True)
