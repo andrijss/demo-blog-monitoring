@@ -11,6 +11,8 @@ from flask import (
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 
+#new version
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 USERS_FILE = os.path.join(BASE_DIR, "users.json")
 POSTS_FILE = os.path.join(BASE_DIR, "posts.json")
